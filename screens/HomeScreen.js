@@ -21,11 +21,11 @@ const HomeScreen = ({ navigation }) => {
   const [loadingRandomIngre, setLoadingRandomIngre] = useState(true)
   const [loadingCountries, setLoadingCountries] = useState(true)
 
-  const fetchRandom = async() =>{
+  const fetchRandom = async(abort) =>{
     if(randomMeals.length === 0){
       let randomizeMeals = []
       for(let i = 0; i < 10; i++)
-        await axios.get('https://www.themealdb.com/api/json/v1/1/random.php').then(res=>{
+        await axios.get('https://www.themealdb.com/api/json/v1/1/random.php', { signal: abort.signal }).then(res=>{
             randomizeMeals.push(res.data.meals[0])
         }).catch(err=>{
           Alert(err)
@@ -35,11 +35,11 @@ const HomeScreen = ({ navigation }) => {
         setLoadingRandomMeals(false)
     }
   }
-  const fetchPopularIngredients = async() =>{
+  const fetchPopularIngredients = async(abort) =>{
     let popularIngredients = []
     if(popularIngre.length === 0){
       for(let i = 0; i < 4; i++){
-        await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?i=list').then(res=>{
+        await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?i=list', { signal: abort.signal }).then(res=>{
           popularIngredients.push(res.data.meals[i])
         }).catch(err=>{
           Alert(err.message)
@@ -53,11 +53,11 @@ const HomeScreen = ({ navigation }) => {
     }
 
   }
-  const fetchRandomIngredients = async() =>{
+  const fetchRandomIngredients = async(abort) =>{
     let randomizeIngredients = []
     if(randomIngredients.length === 0){
       for(let i = 0; i < 6; i++){
-        await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?i=list').then(res=>{
+        await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?i=list', { signal: abort.signal }).then(res=>{
            const random = res.data.meals[Math.floor(Math.random()* 606)]
            randomizeIngredients.push(random)
          })
@@ -69,9 +69,9 @@ const HomeScreen = ({ navigation }) => {
     }
 
 }
-const fetchCountries = async () =>{
+const fetchCountries = async (abort) =>{
   if(countriesName.length === 0){
-    await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?a=list').then(res=>{
+    await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?a=list', { signal: abort.signal }).then(res=>{
       setCountriesName(res.data.meals)
     }).catch(err=>{
       alert(err.message)
@@ -85,10 +85,16 @@ const fetchCountries = async () =>{
 
   
   useEffect(()=>{
-    fetchRandom()
-    fetchPopularIngredients()
-    fetchRandomIngredients()
-    fetchCountries()
+    const abortControl = new AbortController()
+
+    setTimeout(()=>{
+      fetchRandom(abortControl)
+      fetchPopularIngredients(abortControl)
+      fetchRandomIngredients(abortControl)
+      fetchCountries(abortControl)
+    }, 1000)
+
+    return abortControl.abort()
   }, [])
 
 

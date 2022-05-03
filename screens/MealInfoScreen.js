@@ -3,19 +3,11 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { fetchSingleMealData } from '../utils/utils'
 import Header from '../components/Header'
 import IngredientsList from '../components/IngredientsList'
-//import YoutubePlayer from "react-native-youtube-iframe";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const MealInfoScreen = ({ route }) => {
   const { name, image, mealId } = route.params
-  const [playing, setPlaying] = useState(false)
   const [mealObj, setMealObj] = useState({})
-
-  const onStateChange = useCallback((state) => {
-    if (state === "ended") {
-      setPlaying(false);
-      Alert.alert("video has finished playing!");
-    }
-  }, []);
 
   useEffect(()=>{
     fetchSingleMealData(mealId).then(res=>{
@@ -83,6 +75,16 @@ const MealInfoScreen = ({ route }) => {
     }
   }
 
+  const youtubeId = () =>{
+    if(mealObj.strYoutube){
+        const normal = mealObj.strYoutube
+        const ytId = normal.substring(normal.length - 11)
+        return ytId
+    }else{
+        return null
+    }
+  }
+
   return (
     <>
     <Header />
@@ -99,14 +101,13 @@ const MealInfoScreen = ({ route }) => {
             <View style={styles.imageContainer}>
                 <Image source={{uri: image}} style={styles.image}  />
             </View>
+            <YoutubePlayer  
+              height={200} 
+              videoId={youtubeId()}
+            />
             <IngredientsList mealObj={mealObj} />
         </View>
-        {/* <YoutubePlayer
-        height={300}
-        play={playing}
-        videoId={"iee2TATGMyI"}
-        onChangeState={onStateChange}
-      /> */}
+
     
     </ScrollView>
     </ImageBackground>

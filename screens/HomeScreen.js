@@ -22,13 +22,15 @@ const HomeScreen = ({ navigation }) => {
   const [loadingCountries, setLoadingCountries] = useState(true)
 
   const fetchRandom = async(abort) =>{
+    
     if(randomMeals.length === 0){
       let randomizeMeals = []
       for(let i = 0; i < 10; i++)
         await axios.get('https://www.themealdb.com/api/json/v1/1/random.php', { signal: abort.signal }).then(res=>{
             randomizeMeals.push(res.data.meals[0])
+            
         }).catch(err=>{
-          Alert(err)
+          Alert.alert(err.message)
         })
 
         setRandomMeals(randomizeMeals)
@@ -42,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
         await axios.get('https://www.themealdb.com/api/json/v1/1/list.php?i=list', { signal: abort.signal }).then(res=>{
           popularIngredients.push(res.data.meals[i])
         }).catch(err=>{
-          Alert(err.message)
+          Alert.alert(err.message)
         })
       }
   
@@ -94,7 +96,7 @@ const fetchCountries = async (abort) =>{
       fetchCountries(abortControl)
     }, 1000)
 
-    return abortControl.abort()
+    return () => abortControl.abort()
   }, [])
 
 

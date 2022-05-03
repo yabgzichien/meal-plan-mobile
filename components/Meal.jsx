@@ -1,18 +1,26 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
-const Meal = ({ name, image, mealId, navigation }) => {
-
+const Meal = ({ name, image, mealId, navigation, alignment }) => {
 
   const navigateScreen = () =>{
     navigation.navigate('MealInfo', { name, image, mealId })
   }
 
   return (
-    <TouchableOpacity style={styles.container} onPress={navigateScreen}>
-      <Image source={{uri: image}} style={styles.image} />
-      <Text style={styles.txt} numberOfLines={1}>{name}</Text>
-    </TouchableOpacity>
+    <>
+    {alignment === 'vertical' ? 
+      <TouchableOpacity style={styles.container} onPress={navigateScreen}>
+        <Image source={{uri: image}} style={styles.imageVertical} />
+        <Text style={styles.txt} numberOfLines={1}>{name}</Text>
+      </TouchableOpacity>:
+
+      <TouchableOpacity style={styles.container} onPress={navigateScreen}>
+        <Image source={{uri: image}} style={styles.image} />
+        <Text style={styles.txt} numberOfLines={1}>{name}</Text>
+      </TouchableOpacity>
+    }
+    </>
   )
 }
 
@@ -36,6 +44,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: 200,
         textAlign: 'center',
+    },
+    imageVertical:{
+      width: 200,
+      height: 200,
+      resizeMode: 'contain',
     }
 
 })

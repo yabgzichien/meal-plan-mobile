@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import IngredientsList from '../components/IngredientsList'
 import YoutubePlayer from "react-native-youtube-iframe";
 
-const MealInfoScreen = ({ route }) => {
+const MealInfoScreen = ({ route, navigation }) => {
   const { name, image, mealId } = route.params
   const [mealObj, setMealObj] = useState({})
 
@@ -87,7 +87,7 @@ const MealInfoScreen = ({ route }) => {
 
   return (
     <>
-    <Header />
+    <Header navigation={navigation} />
     <ImageBackground source={require('../assets/food1.jpg')} style={{flex: 1}}>
     <ScrollView>
         <View style={styles.container}>

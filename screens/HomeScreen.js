@@ -89,12 +89,12 @@ const fetchCountries = async (abort) =>{
   useEffect(()=>{
     const abortControl = new AbortController()
 
-    setTimeout(()=>{
-      fetchRandom(abortControl)
-      fetchPopularIngredients(abortControl)
-      fetchRandomIngredients(abortControl)
-      fetchCountries(abortControl)
-    }, 1000)
+ 
+    fetchRandom(abortControl)
+    fetchPopularIngredients(abortControl)
+    fetchRandomIngredients(abortControl)
+    fetchCountries(abortControl)
+    
 
     return () => abortControl.abort()
   }, [])
@@ -111,7 +111,7 @@ const fetchCountries = async (abort) =>{
 
   return (
     <>
-    <Header />
+    <Header navigation={navigation} />
     
     <ImageBackground source={require('../assets/food1.jpg')}  style={styles.container}>
     <ScrollView>
@@ -120,14 +120,15 @@ const fetchCountries = async (abort) =>{
           <FlatList  
             horizontal={true} 
             data={randomMeals}
-            renderItem={({ item })=> 
+            renderItem={({ item })=> (
             <Meal 
               mealId={item?.idMeal}  
               name={item?.strMeal} 
               key={item?.idMeal} 
               image={item?.strMealThumb}
               navigation={navigation}
-               />}
+               />)}
+
           />
       </View>
       <View style={styles.flatlist}>
@@ -141,6 +142,7 @@ const fetchCountries = async (abort) =>{
               name={item?.strIngredient} 
               key={item?.idIngredient} 
                />}
+
           />
       </View>
       <View style={styles.flatlist}>
@@ -154,6 +156,7 @@ const fetchCountries = async (abort) =>{
               name={item?.strIngredient} 
               key={item?.idIngredient} 
                />}
+
           />
       </View>
 

@@ -10,6 +10,7 @@ import Context from './Context'
 // screens
 import HomeScreen from './screens/HomeScreen';
 import MealInfoScreen from './screens/MealInfoScreen';
+import SearchScreen from './screens/SearchScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -37,6 +38,7 @@ export default function App() {
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
             <Stack.Screen name="MealInfo" component={MealInfoScreen} options={{headerShown: false}} />
+            <Stack.Screen name="Search" component={SearchScreen} options={{headerShown: false}} />
           </Stack.Navigator>
         </Context.Provider>
       </ModalContext.Provider>

@@ -79,9 +79,11 @@ const styles = StyleSheet.create({
     textIngredient:{
         fontSize: 16,
         marginHorizontal: 10,
+        maxWidth: 100
     },
     textMeasure:{
         fontSize: 16,
         marginHorizontal: 10,
+        maxWidth: 100
     }
 })

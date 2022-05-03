@@ -1,14 +1,19 @@
 import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Pressable  } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ModalContext from '../MenuModalState';
 
-const Header = () => {
+const Header = ({ navigation }) => {
   
   const { visible, setVisible } = useContext(ModalContext)
+  const [search, setSearch] = useState('')
+
+  const searchItem = () =>{
+    navigation.navigate('Search', { search })
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -18,8 +23,10 @@ const Header = () => {
       </Pressable>
 
       <View style={styles.textInputContainer}>
-        <TextInput style={styles.textInput} placeholder='search' />
-        <Feather name="search" size={24} color="black" style={styles.icon} />
+        <TextInput onChangeText={setSearch} value={search} style={styles.textInput} placeholder='search' />
+        <Pressable onPress={searchItem}>
+          <Feather name="search" size={24} color="black" style={styles.icon} />
+        </Pressable>
         <FontAwesome name="filter" size={24} color="black" style={styles.icon} />
       </View>
 

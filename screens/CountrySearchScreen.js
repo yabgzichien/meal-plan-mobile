@@ -8,7 +8,17 @@ const CountrySearchScreen = ({ route, navigation }) => {
   const { countryName, countryFlag } = route.params
   const [searchMeal, setSearchMeal] = useState([])
 
-  console.log(countryName)
+  const fetchData = async () =>{
+    axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${countryName}`).then(res=>{
+      setSearchMeal(res.data.meals)
+    }).catch(err=>{
+      Alert.alert(err.message)
+    })
+  }
+
+  useEffect(()=>{
+    fetchData()
+  }, [])
 
   return (
     <>

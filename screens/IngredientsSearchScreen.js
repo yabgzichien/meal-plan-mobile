@@ -5,11 +5,12 @@ import axios from 'axios'
 import Meal from '../components/Meal'
  
 const IngredientSearchScreen = ({ route, navigation }) => {
-  const params = route.params
+  const { name } = route.params
   const [searchMeal, setSearchMeal] = useState([])
 
-  const fetchData = async () =>{
-    await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${params.name}`).then(res=>{
+  const fetchData = async (abortControl) =>{
+    
+    await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${name}`, { signal: abortControl.signal }).then(res=>{
       setSearchMeal(res.data.meals)
     }).catch(err=>{
       Alert.alert(err.message)
@@ -17,7 +18,10 @@ const IngredientSearchScreen = ({ route, navigation }) => {
   }
 
   useEffect(()=>{
-    fetchData()
+    const abortControl = new AbortController()
+    fetchData(abortControl)
+
+    return () => abortControl.abort()
   }, [])
 
   return (
@@ -28,9 +32,9 @@ const IngredientSearchScreen = ({ route, navigation }) => {
         <View>
             <View style={styles.searchContainer}>
                 <View style={styles.imageContainer}>
-                  <Image source={{uri: `https://www.themealdb.com/images/ingredients/${params.name}.png`}} style={styles.image} />
+                  <Image source={{uri: `https://www.themealdb.com/images/ingredients/${name}.png`}} style={styles.image} />
                 </View>
-                <Text style={styles.searchResultText}>{params.name}</Text>
+                <Text style={styles.searchResultText}>{name}</Text>
             </View>
 
             <FlatList 

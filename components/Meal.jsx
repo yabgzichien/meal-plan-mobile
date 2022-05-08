@@ -10,7 +10,7 @@ const Meal = ({ name, image, mealId, navigation, alignment }) => {
   return (
     <>
     {alignment === 'vertical' ? 
-      <TouchableOpacity style={styles.container} onPress={navigateScreen}>
+      <TouchableOpacity style={styles.verticalContainer} onPress={navigateScreen}>
         <Image source={{uri: image}} style={styles.imageVertical} />
         <Text style={styles.txt} numberOfLines={1}>{name}</Text>
       </TouchableOpacity>:
@@ -49,6 +49,15 @@ const styles = StyleSheet.create({
       width: 200,
       height: 200,
       resizeMode: 'contain',
+    },
+    verticalContainer:{
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      padding: 2,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 10,
+      paddingVertical: 10,
     }
 
 })

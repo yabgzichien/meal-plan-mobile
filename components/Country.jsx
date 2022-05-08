@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React from 'react'
 
-const Country = ({ countryName }) => {
+const Country = ({ countryName, navigation }) => {
     const countryFlag = (country) =>{
         switch(country){
           case 'American':
@@ -62,11 +62,16 @@ const Country = ({ countryName }) => {
             return
         }
       }
+
+  const navigate = () =>{
+    navigation.navigate('CountrySearch', { countryFlag, countryName })
+  }  
+  
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={navigate}>
       {countryFlag(countryName)}
       <Text>{countryName}</Text>
-    </View>
+    </Pressable>
   )
 }
 

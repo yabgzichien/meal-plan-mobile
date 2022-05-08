@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, Alert } from 'react-native'
+import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, Alert, } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { fetchSingleMealData } from '../utils/utils'
 import Header from '../components/Header'
@@ -89,7 +89,7 @@ const MealInfoScreen = ({ route, navigation }) => {
     <>
     <Header navigation={navigation} />
     <ImageBackground source={require('../assets/food1.jpg')} style={{flex: 1}}>
-    <ScrollView>
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
         <View style={styles.container}>
             <View style={styles.headerTextContainer}>
                 <Text style={styles.headerText}>{name}</Text>            

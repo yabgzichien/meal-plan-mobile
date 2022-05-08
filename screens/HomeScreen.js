@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ImageBackground, Pressable, ScrollView, Alert, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, Pressable, ScrollView, Alert, FlatList, RefreshControl } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
 
 import Header from '../components/Header'
@@ -85,15 +85,20 @@ const fetchCountries = async (abort) =>{
 
 }
 
-  
-  useEffect(()=>{
-    const abortControl = new AbortController()
-
- 
-    fetchRandom(abortControl)
+  const [canRefresh, setCanRefresh] = useState(false)
+  const fetchData = async (abortControl) =>{ 
     fetchPopularIngredients(abortControl)
     fetchRandomIngredients(abortControl)
     fetchCountries(abortControl)
+    await fetchRandom(abortControl)
+
+    setCanRefresh(true)
+  }  
+
+  useEffect(()=>{
+    const abortControl = new AbortController()
+
+    fetchData(abortControl)
     
 
     return () => abortControl.abort()
@@ -108,13 +113,40 @@ const fetchCountries = async (abort) =>{
     height: 200,
   };
 
+  const [refreshing, setRefreshing] = useState(false)
+  const refreshPage = async () =>{
+
+    if(canRefresh){
+      setRefreshing(true)
+      setRandomMeals([])
+      setPopularIngre([])
+      setRandomIngredients([])
+      setCountriesName([])
+  
+      const abortControl = new AbortController()
+      await fetchData(abortControl)
+      setRefreshing(false)
+    }else{
+      return
+    }
+
+  }
 
   return (
     <>
     <Header navigation={navigation} />
     
     <ImageBackground source={require('../assets/food1.jpg')}  style={styles.container}>
-    <ScrollView>
+    <ScrollView
+      style={{flex: 1}}
+      contentContainerStyle={{flexGrow: 1}}
+      refreshControl={
+        <RefreshControl 
+          refreshing={refreshing}
+          onRefresh={refreshPage}
+        />
+      }
+    >
       <View style={styles.flatlist}>
           <Text style={styles.flatlistText}>Random Meals</Text>
           <FlatList  
@@ -141,6 +173,7 @@ const fetchCountries = async (abort) =>{
               id={item?.idIngredient}  
               name={item?.strIngredient} 
               key={item?.idIngredient} 
+              navigation={navigation}
                />}
 
           />
@@ -155,6 +188,7 @@ const fetchCountries = async (abort) =>{
               id={item?.idIngredient}  
               name={item?.strIngredient} 
               key={item?.idIngredient} 
+              navigation={navigation}
                />}
 
           />
@@ -165,13 +199,15 @@ const fetchCountries = async (abort) =>{
         <FlatList 
           horizontal={true}
           data={countriesName}
-          renderItem={({ item })=> <Country countryName={item?.strArea} key={item?.strArea} />}
+          renderItem={({ item })=> <Country countryName={item?.strArea} key={item?.strArea}
+          navigation={navigation}
+          />}
         />
       </View>
+        
+       
 
-
-
-      <Provider>
+        <Provider>
 
 
         <Portal>
@@ -181,6 +217,7 @@ const fetchCountries = async (abort) =>{
         </Portal>
         </Provider>
    
+          
         </ScrollView>
     </ImageBackground>
     </>

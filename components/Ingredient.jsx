@@ -6,7 +6,7 @@ const Ingredient = ({ name, image, id, navigation }) => {
   // image is undefined
 
   const navigate = () => {
-    navigation.navigate('IngredientSearch', { name, id })
+    navigation.navigate('Ingredient', { name, id })
   }
 
   return (

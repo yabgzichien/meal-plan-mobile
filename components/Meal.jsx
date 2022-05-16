@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 const Meal = ({ name, image, mealId, navigation, alignment }) => {
 
   const navigateScreen = () =>{
-    navigation.navigate('MealInfo', { name, image, mealId })
+    navigation.navigate('Meal Info', { name, image, mealId })
   }
 
   return (

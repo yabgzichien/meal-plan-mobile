@@ -5,22 +5,39 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ModalContext from '../MenuModalState';
+import { useRoute } from '@react-navigation/native';
 
 const Header = ({ navigation }) => {
   
+  const route = useRoute()
+
   const { visible, setVisible } = useContext(ModalContext)
   const [search, setSearch] = useState('')
 
   const searchItem = () =>{
     navigation.navigate('Search', { search })
   }
+  const planScreen = () =>{
+    navigation.navigate('Plan')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
 
-      <Pressable onPress={()=> setVisible(false)}  style={styles.upperHeaderContainer}>
-        <Entypo name="menu" size={30} color="black" />
-      </Pressable>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',width: 300}}>
+
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Pressable onPress={()=> setVisible(false)}  style={styles.upperHeaderContainer}>
+            <Entypo name="menu" size={30} color="black" />
+          </Pressable>
+
+          <Text style={{fontSize: 20, marginLeft: 20, fontWeight: '700'}}>{route.name}</Text>
+        </View>
+
+        <Pressable onPress={planScreen}>
+          <FontAwesome5 name="calendar" size={24} color="black" />
+        </Pressable>
+      </View>
 
       <View style={styles.textInputContainer}>
         <TextInput onChangeText={setSearch} value={search} style={styles.textInput} placeholder='search' />
@@ -29,10 +46,6 @@ const Header = ({ navigation }) => {
         </Pressable>
         <FontAwesome name="filter" size={24} color="black" style={styles.icon} />
       </View>
-
-      <FontAwesome5 name="calendar" size={24} color="black" />
-
-      
     </SafeAreaView>
   )
 }
@@ -42,10 +55,9 @@ export default Header
 const styles = StyleSheet.create({
     container: {
         marginTop: Platform.OS === "android" ? 30 : 0,
-        backgroundColor: 'rgb(173, 173, 255)',
-        padding: 15,
+        backgroundColor: '#f2f2f2',
+        padding: 5,
         display: 'flex',
-        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around'
     },
@@ -58,7 +70,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     textInput:{
-        width: 170,
+        width: 230,
         fontSize: 20,
         padding: 5,
     },
